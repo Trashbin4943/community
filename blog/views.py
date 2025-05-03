@@ -24,6 +24,20 @@ def view_post(request, pk):
     post=get_object_or_404(Blog,pk=pk)
     return render (request, 'view_post.html', {'post': post})
 
+def edit_post(request, pk):
+    post = get_object_or_404(Blog, pk=pk)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post_list')
+    else:
+        form = PostForm(instance=post)
+
+    return render(request, 'edit_post.html', {'form': form, 'post': post})
+
+
 def signup_view(request):
     if request.method=='POST':
         form = SignupForm(request.POST)

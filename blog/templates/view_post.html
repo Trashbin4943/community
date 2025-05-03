@@ -12,5 +12,6 @@
         <p>{{ post.body }}</p>
 
         <a href="{% url 'post_list' %}">← 목록으로 돌아가기</a>
+        <a href="{% url 'edit_post' pk=post.pk %}" class="button">수정하기</a>
     </body>
 </html>

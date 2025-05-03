@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <title>글 수정하기</title>
+    </head>
+    <body>
+        <h1>글 수정하기: {{ post.title }}</h1>
+        <form method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <button type="submit">수정 완료</button>
+        </form>
+        <a href="{% url 'post_detail' pk=post.pk %}">뒤로 가기</a>
+    </body>
+</html>
