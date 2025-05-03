@@ -16,7 +16,14 @@
 
             <div class="buttons">
                 <a href="{% url 'post_list' %}" class="btn">← 목록으로</a>
+
+                {% if post.author == user %}
                 <a href="{% url 'edit_post' pk=post.pk %}" class="btn edit">수정하기</a>
+                <form action="{% url 'delete_post' pk=post.pk %}" method="post" style="display: inline">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-button" style="background-color: red">삭제하기</button>
+                </form>
+                {% endif %}
             </div>
         </div>
     </body>

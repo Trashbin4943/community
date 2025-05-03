@@ -37,6 +37,12 @@ def edit_post(request, pk):
 
     return render(request, 'edit_post.html', {'form': form, 'post': post})
 
+def delete_post(request, pk):
+    post= get_object_or_404(Blog,pk=pk)
+    if request.method=='POST':
+        post.delete()
+        return redirect('post_list')
+    return render(request, 'delete_post.html', {'post',post})
 
 def signup_view(request):
     if request.method=='POST':
