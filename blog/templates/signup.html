@@ -1,15 +1,19 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>회원가입</title>
+        <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
     </head>
     <body>
-        <h2>회원가입</h2>
-        <form method="post">
-            {% csrf_token %} {{ form.as_p }}
-            <button type="submit">가입</button>
-        </form>
+        <div class="signup-container">
+            <h2>회원가입</h2>
+            <form method="post">
+                {% csrf_token %} {{ form.as_p }}
+                <button type="submit" class="btn">가입</button>
+            </form>
+        </div>
     </body>
 </html>
