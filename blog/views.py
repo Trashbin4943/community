@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Blog
-from .forms import PostForm, SignupForm
+from .models import Blog, Comment
+from .forms import PostForm, SignupForm, CommentForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -20,9 +20,23 @@ def post_list(request):
     posts = Blog.objects.all()
     return render (request, 'post_list.html', {'posts': posts})
 
-def view_post(request, pk):
+def view_post(request, pk=int):
     post=get_object_or_404(Blog,pk=pk)
-    return render (request, 'view_post.html', {'post': post})
+    comments=post.comments.all()
+
+    if request.method=="POST":
+        form=CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post=post
+            comment.author=request.user
+            comment.save()
+            return redirect('post_detail', pk=pk)
+    else:
+        form=CommentForm()
+
+    return render (request, 'view_post.html', {'post': post, 'comments': comments, 'form':form})
+
 
 def edit_post(request, pk):
     post = get_object_or_404(Blog, pk=pk)
@@ -42,7 +56,17 @@ def delete_post(request, pk):
     if request.method=='POST':
         post.delete()
         return redirect('post_list')
-    return render(request, 'delete_post.html', {'post',post})
+    return render(request, {'post': post})
+
+def delete_comment(request,comment_id):
+    comment= get_object_or_404(Comment, pk=comment_id)
+
+    if request.method == "POST" and request.user == comment.author:
+        post_pk= comment.post.pk
+        comment.delete()
+        return redirect('post_detail', pk=post_pk)
+    return redirect('post_detail', pk=comment.post.pk)
+    
 
 def signup_view(request):
     if request.method=='POST':
